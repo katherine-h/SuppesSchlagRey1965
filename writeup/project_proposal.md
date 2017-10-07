@@ -1,12 +1,3 @@
----
-title: "Project Proposal"
-output: html_document
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
 I study rule-based concept learning. A classic study in this area is Suppes and Schlag-Rey's “Observable changes of hypotheses under positive reinforcement” (1965), which shows that people frequently revise their hypotheses about the definition of a concept even in response to evidence indicating that their hypothesis is already consistent with the data. This supports a model in which people continually update a probabilistic picture of a set of rule hypotheses and the corresponding data classifications.
 
 During the initial phase of this experiment, the authors asked participants to classify letter patterns (e.g. “DDK”, “DKK”, etc. — all triples composed of D’s and K's, written on white index cards) into two categories ("blue" and "pink"). The authors did not give participants any hints as to the true bases of the categories, which were governed by a rule (that pink items are patterns ending with "DD" or "KK"). During the second phase of the experiment, in each of a series of trials, the experimenter removed one of the white index cards and gave the participant a blue or pink card containing the same pattern of letters; the color of the card indicated to which category that pattern belonged. Having been given this positive reinforcement (the true category matched the participant's initial category guess) or negative reinforcement, the participant had an opportunity to move around any cards they thought they had misclassified during the initial sorting phase. One would predict that participants would re-classify cards in light of negative reinforcement. However, they often did so even given positive reinforcement, which is mysterious because the new evidence in this case would merely seem to validate their existing hypothesis about what the rule is. These findings, then, suggest a number of interesting questions about the nature of rule-based concept learning, and so seem worthwhile to replicate.
