@@ -1,0 +1,40 @@
+ created files
+*.Rproj
+*.Rproj.user
+*.Rhistory
+*.RData
+*.Ruserdata
+*.history
+
+# Image/output files unless otherwise specified
+*.pdf
+*.png
+*.docx
+*.doc
+*.jpg
+*.gif
+
+# Misc Knit Files
+*.aux
+*.gz
+*.log
+*.rdx
+*.rdb
+*.knit.md
+*cache
+
+# Other
+packrat/lib*/
+packrat/src*/
+*.httr-oauth
+*.DS_Store
+
+# MTurk credentials and data
+auth.json
+my-own-auth.json
+mturk/
+
+
+# Specific file keep
+!README.md
+!original_paper/SuppesSchlagRey1965.txt
