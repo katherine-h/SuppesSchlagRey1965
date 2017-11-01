@@ -74,6 +74,15 @@ jsPsych.plugins['free-sort-mod'] = (function() {
 
   plugin.trial = function(display_element, trial) {
 
+    function preloadImage(url){
+        var img=new Image();
+        img.src=url;
+    }
+
+    for (i = 0; i<8; i++){
+      preloadImage('ims/im' + i + '_colored.png')
+    }
+
     var start_time = (new Date()).getTime();
 
     var html = ""; //Add dividing line
