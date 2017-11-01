@@ -8,7 +8,7 @@
 
 # Image/output files unless otherwise specified
 *.pdf
-*.png
+#*.png
 *.docx
 *.doc
 *.jpg
