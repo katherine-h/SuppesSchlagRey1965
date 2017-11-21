@@ -1,0 +1,120 @@
+<html>
+  <head>
+    <title>My experiment</title>
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!-- jsPsych -->
+    <script src="jsPsych/jspsych.js"></script>
+    <script src="jsPsych/plugins/jspsych-instructions.js"></script>
+    <script src="jsPsych/plugins/free_sort_mod.js"></script>
+    <script src="jsPsych/plugins/jspsych-survey-multi-select.js"></script>
+    <script src="jsPsych/plugins/jspsych-survey-text.js"></script>
+    <link href="jsPsych/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+    <!-- mmTurkey -->
+    <script src="mmturkey.js"></script>
+  </head>
+  
+  <body>
+    <div id="jspsych_target"></div>
+  </body>
+
+  <script type='text/javascript'>
+
+  ///////////////////////////////////////////////////////////////////////////
+  ////////////////////////// SPECIFY EXPT COMPONENTS ////////////////////////
+  ///////////////////////////////////////////////////////////////////////////
+
+  // welcome page
+  var welcome_block = {
+    type: 'instructions',
+    pages: ['Welcome to the experiment.</p>' +
+            '<p>Press the <b>"Next"</b> button to begin.', 
+            '<p>Classify these cards by correctly placing them in the pink ' +
+            'and blue category boxes.</p><p>Click and drag to move a card.' + 
+            '</p><p>Click the <b>"Next"</b> button once you have completed '+
+            'your classification.</p>'],
+    show_clickable_nav: true      
+  }
+
+  // define stims
+  var im_path = 'ims/'
+  var sorting_stimuli = []
+  for (var i = 0; i <= 7; i++){
+    sorting_stimuli.push(im_path + 'im' + i + '.png')
+  }
+
+  // main experiment trials (heavily modified jsPsych plugin; stim and 
+  //  sort area dims are defined in the free-sort-mod relative to subject's 
+  //  browser window dims)
+  var sort_trial = {
+    type: 'free-sort-mod',
+    stimuli: sorting_stimuli,
+    stim_height: '',
+    stim_width: '',
+    sort_area_height: '',
+    prompt: '<p></p>'
+  }
+
+  // demographics questions
+  var age_choices = ['18-29 years old', '30-49 years old', '50-64 years old',
+                     '65 years and over']
+  var gender_choices = ['Male', 'Female', 'Other']
+  var education_choices = ['some high school', 'high school graduate', 
+                      'some college', 'trade/technical/vocational training',
+                      'college graduate', 'some postgraduate work', 
+                      'postgraduate degree']
+  var demographics = {
+    type: 'survey-multi-select',
+    preamble: ['<p>Please answer the following demographics questions.</p>'],
+    questions: [{prompt: '<p><i><b>(1)</b> What is your age?</i></p>', 
+                options: age_choices, horizontal: true}, 
+                {prompt: '<p><i><b>(2)</b> What is your gender?</i></p>', 
+                options: gender_choices, horizontal: true}, 
+                {prompt: '<p><i><b>(3)</b> What ' +
+                'is your level of education?</i></p>', 
+                options: education_choices, 
+                horizontal: false}],
+    required: true
+  }
+
+  // ask subjects if any problems completing the experiment
+  var problem_report = {
+    type: 'survey-text',
+    questions: [{prompt: '<p>Did you run into any issues while completing ' +
+                'this study?</p><p>(If yes, please describe)</p>'}],
+    rows: [10]
+  }
+
+  // final debriefing message
+  var debrief_block = {
+    type: 'instructions',
+    pages: ['<p>Thank you for your participation.</p><p>Press <b>"Next"</b> to ' +
+            'complete the experiment.'],
+    show_clickable_nav: true
+  }
+
+  ///////////////////////////////////////////////////////////////////////////
+  ////////////////////////// ASSEMBLE COMPONENTS ////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////
+
+  // create experiment timeline array
+  var timeline = []
+  timeline.push(welcome_block)
+  // timeline.push(sort_trial)
+  timeline.push(demographics)
+  timeline.push(problem_report)
+  timeline.push(debrief_block)
+
+  // start the experiment
+  jsPsych.init({
+    timeline: timeline,
+    // on_finish: function() {
+    //   jsPsych.data.displayData('json')
+    // }
+    on_finish: function() {
+      opener.turk.submit(jsPsych.data.getData())
+    }
+  })
+
+  </script>
+</html>
