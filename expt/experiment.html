@@ -100,7 +100,7 @@
   // create experiment timeline array
   var timeline = []
   timeline.push(welcome_block)
-  // timeline.push(sort_trial)
+  timeline.push(sort_trial)
   timeline.push(demographics)
   timeline.push(problem_report)
   timeline.push(debrief_block)
@@ -108,12 +108,12 @@
   // start the experiment
   jsPsych.init({
     timeline: timeline,
-    // on_finish: function() {
-    //   jsPsych.data.displayData('json')
-    // }
     on_finish: function() {
-      opener.turk.submit(jsPsych.data.getData())
+      jsPsych.data.displayData('json')
     }
+    // on_finish: function() {
+    //   opener.turk.submit(jsPsych.data.getData())
+    // }
   })
 
   </script>
