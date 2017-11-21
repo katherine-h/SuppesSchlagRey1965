@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Example</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="mmturkey.js"></script>   
+        <link href = "jsPsych/css/jspsych.css" rel="stylesheet" type = "text/css"></link>     
+    </head> 
+    <body>
+    <div id = intro_page ></div>
+    </body>
+    
+    <script>
+    
+    suitable_browser = navigator.userAgent.indexOf("Chrome") == -1 && navigator.userAgent.indexOf("Firefox") == -1
+    turk.previewMode = (turk.assignmentId == "ASSIGNMENT_ID_NOT_AVAILABLE")
+    
+    var welcome_instructions = 
+        '<div id="instructions"><div style="width: 500px; margin: 0 auto; text-align: ' +
+        'center; background-color: #8C1516; padding: 20px 15px 10px 10px">' +
+        '<img src="img/stanford.png" height="46" width="360" alt="Stanford University"></div>' +
+        '<p class="block-text">Welcome to the experiment! In this experiment you will perform a different behavioral task and complete a brief survey. Together, they should take about 10 minutes.' +
+        '<p class="block-text">' + 
+        '<strong> You must use either Firefox or Chrome. </strong></p> ' +
+        '<p class="block-text">When you begin, a new window will open where you complete the tasks. ' +
+        'If you are ready, press the <strong>"Enter"</strong> key.  </p>' +
+        '<p class="block-text legal">By answering the following questions, you are participating in a study being performed by cognitive scientists in the Stanford Department of Psychology. If you have questions about this research, please contact us at stanfordpsych254@gmail.com. You must be at least 18 years old to participate. Your participation in this research is voluntary. You may decline to answer any or all of the following questions. You may decline further participation, at any time, without adverse consequences. Your anonymity is assured; the researchers who have requested your participation will not receive any personal information about you. We have recently been made aware that your public Amazon.com profile can be accessed via your worker ID if you do not choose to opt out. If you would like to opt out of this feature, you may follow instructions available here: https://www.amazon.com/gp/help/customer/display.html?nodeId=16465241</p></div>'
+    document.getElementById("intro_page").innerHTML = welcome_instructions
+    
+    window.onkeypress = function(event) {
+     if (event.keyCode == 13 && !turk.previewMode && !suitable_browser) {
+      window.open('jspsych_tutorial.html')
+        }
+    }
+    
+    </script>
+</html>
