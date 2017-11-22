@@ -109,13 +109,13 @@
   jsPsych.init({
     timeline: timeline,
     // on_finish: function() {
-    //   var final_data = jsPsych.data.get()
-    //   console.log(final_data.csv())
+    //   var final_data = jsPsych.data.get().json()
+    //   console.log(final_data)
     //   jsPsych.data.displayData('json')
     // }
     on_finish: function() {
-      var final_data = jsPsych.data.data()
-      opener.turk.submit(final_data.json())
+      var final_data = jsPsych.data.get().json()
+      opener.turk.submit(final_data.)
     }
   })
 
