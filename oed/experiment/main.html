@@ -1,17 +1,17 @@
 <html>
   <head>
-    <title>My experiment</title>
+    <title>Categorization experiment</title>
     <!-- jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <!-- jsPsych -->
     <script src="jsPsych/jspsych.js"></script>
     <script src="jsPsych/plugins/jspsych-instructions.js"></script>
     <script src="jsPsych/plugins/free_sort_mod.js"></script>
-    <script src="jsPsych/plugins/jspsych-survey-multi-select.js"></script>
+    <script src="jsPsych/plugins/jspsych-survey-multi-choice.js"></script>
     <script src="jsPsych/plugins/jspsych-survey-text.js"></script>
     <link href="jsPsych/css/jspsych.css" rel="stylesheet" type="text/css"></link>
     <!-- mmTurkey -->
-    <script src="javascript/mmturkey.js"></script>
+    <script src="mmturkey.js"></script>
   </head>
   
   <body>
@@ -64,7 +64,7 @@
                       'college graduate', 'some postgraduate work', 
                       'postgraduate degree']
   var demographics = {
-    type: 'survey-multi-select',
+    type: 'survey-multi-choice',
     preamble: ['<p>Please answer the following demographics questions.</p>'],
     questions: [{prompt: '<p><i><b>(1)</b> What is your age?</i></p>', 
                 options: age_choices, horizontal: true}, 
@@ -100,19 +100,22 @@
   // create experiment timeline array
   var timeline = []
   timeline.push(welcome_block)
-  timeline.push(sort_trial)
-  timeline.push(demographics)
-  timeline.push(problem_report)
+  // timeline.push(sort_trial)
+  // timeline.push(demographics)
+  // timeline.push(problem_report)
   timeline.push(debrief_block)
 
   // start the experiment
   jsPsych.init({
     timeline: timeline,
     // on_finish: function() {
+    //   var final_data = jsPsych.data.get()
+    //   console.log(final_data.csv())
     //   jsPsych.data.displayData('json')
     // }
     on_finish: function() {
-      turk.submit(jsPsych.data.getData())
+      var final_data = jsPsych.data.data()
+      opener.turk.submit(final_data)
     }
   })
 
