@@ -108,14 +108,14 @@
   // start the experiment
   jsPsych.init({
     timeline: timeline,
-    // on_finish: function() {
+    on_finish: function() {
     //   var final_data = jsPsych.data.get()
     //   console.log(final_data)
-    //   console.log(final_data.json())
-    //   jsPsych.data.displayData('json')
+      // console.log(jsPsych.data.get().json())
+    // var out = jsPsych.data.displayData('json')
     // }
     on_finish: function() {
-      var final_data = jsPsych.data.get().csv()
+      var final_data = jsPsych.data.get().json()
       opener.turk.submit(final_data)
     }
   })

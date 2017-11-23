@@ -172,6 +172,12 @@ turk = turk || {};
 
   // Submit a POST request to Turk
   turk.submit = function(data, unwrap) {
+
+    console.log('')
+    console.log('**** Data coming in: ')
+    console.log('')
+    console.log(data)
+
     var keys = getKeys(data);
 
     if (typeof data == "undefined" || keys.length == 0) {
@@ -204,6 +210,11 @@ turk = turk || {};
       rawData["data"] = data;
       addFormData(form, "data", JSON.stringify(data));
     }
+
+    console.log('')
+    console.log('**** After unwrap: ')
+    console.log('')
+    console.log(data)
 
     // If there's no turk info
     if (!assignmentId || !turkSubmitTo) {

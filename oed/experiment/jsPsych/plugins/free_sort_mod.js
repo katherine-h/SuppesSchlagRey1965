@@ -391,8 +391,9 @@ jsPsych.plugins['free-sort-mod'] = (function() {
       } else {
         // advance to next part
         display_element.innerHTML = '';
-        jsPsych.finishTrial({'configs' : configs, 
-                             'data' : data}) //JSON.stringify
+        var free_sort_data = {'configs' : JSON.stringify(configs), 
+                              'data' : JSON.stringify(data)}
+        jsPsych.finishTrial(free_sort_data)
       }
     })
   }
