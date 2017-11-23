@@ -30,7 +30,7 @@ jsPsych.plugins['free-sort-mod'] = (function() {
       button_label: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Button label',
-        default:  'Continue',
+        default:  'Next',
         description: 'The text that appears on the button to continue to ' + 
                      'the next trial.'
       }
@@ -383,10 +383,13 @@ jsPsych.plugins['free-sort-mod'] = (function() {
         trial_ind += 1
       }
       if (trial_ind < trial.stimuli.length){
-        alert('The background color indicates to which category this card ' +
-              'belongs. Drag it to the correct box, then make as many ' +
-              '(or no) changes to the placement of the other cards ' +
-              'as necessary to achieve the correct classifications.')
+        if (trial_ind < 2) {
+          alert('We are now going to show you the correct category for one of the ' +
+            'cards by moving it to the top of the screen and changing its background ' +
+            'color to reflect its category. Drag it to the correct box and, if you ' + 
+            'wish, move any of the other cards to incorporate this new information, then ' +
+            'click "Next".')
+        }
         next_trial()
       } else {
         // advance to next part
