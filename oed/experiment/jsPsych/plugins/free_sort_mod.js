@@ -278,10 +278,10 @@ jsPsych.plugins['free-sort-mod'] = (function() {
         
         // console.log('PREV')
         // console.log(previous_categorization)
-
+        trial_data['example_true_category'] = true_categories['im' + trial_ind]
         if (previous_categorization == 'staging' || 
             previous_categorization == 'ambiguous') {
-          trial_data['reinforcement'] = undefined
+          trial_data['reinforcement'] = 'undefined'
         } else {
           if (previous_categorization == true_categories['im' + trial_ind]) {
             trial_data['reinforcement'] = 'positive'
@@ -295,6 +295,7 @@ jsPsych.plugins['free-sort-mod'] = (function() {
 
       } else {
         trial_data['reinforcement'] = null
+        trial_data['example_true_category'] = null
       }
 
       if (trial_data['trial'] == 'starting_config') {
