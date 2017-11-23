@@ -198,6 +198,7 @@ jsPsych.plugins['free-sort-mod'] = (function() {
       // Get current card locations, determine reinforcement type,
       //  count up moves (reclassifications), and save to data
       var total_reclassifications_this_trial = 0
+      var num_ambiguous_placements = 0
       var matches = display_element.querySelectorAll(
                       '.jspsych-free-sort-draggable')
       for (var i = 0; i < matches.length; i++) {
@@ -208,6 +209,7 @@ jsPsych.plugins['free-sort-mod'] = (function() {
           // overlap w/ a category box?
           if (y + stim_height > staging_area_height) {
             region = 'ambiguous'
+            num_ambiguous_placements += 1
           }
         } else {
           if (x < category_box_width) {
@@ -215,6 +217,7 @@ jsPsych.plugins['free-sort-mod'] = (function() {
             // overlap w/ blue box?
             if (x + stim_width > category_box_width) {
               region = 'ambiguous'
+              num_ambiguous_placements += 1
             }
           } else {
             region = 'blue'
@@ -317,6 +320,9 @@ jsPsych.plugins['free-sort-mod'] = (function() {
         console.log('Total reclassifications = ' + 
                     trial_data['total_reclassifications'])
       }
+
+      // count up some additional info
+      trial_data['num_ambiguous_placements'] = num_ambiguous_placements
 
       data.push(trial_data)
     }
