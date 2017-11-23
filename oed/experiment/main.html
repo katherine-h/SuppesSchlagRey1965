@@ -115,7 +115,7 @@
     //   jsPsych.data.displayData('json')
     // }
     on_finish: function() {
-      var final_data = jsPsych.data.get()//.json()
+      var final_data = jsPsych.data.get().csv()
       opener.turk.submit(final_data)
     }
   })
