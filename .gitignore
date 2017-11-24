@@ -39,3 +39,4 @@ data/
 # Specific file keep
 !README.md
 !original_paper/SuppesSchlagRey1965.txt
+.Rproj.user
