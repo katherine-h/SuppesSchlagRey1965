@@ -89,6 +89,12 @@ jsPsych.plugins['free-sort-mod'] = (function() {
     var stim_height = category_box_height/9.5
     var stim_width = stim_height*1.56
 
+    //instruction box specs
+    var left_width = (w/2.0) - (sort_area_width/2.0)
+    var instruction_box_padding = left_width/8.
+    var instructions_box_width =  left_width - (2.0*instruction_box_padding)
+    var instructions_box_height = .6*sort_area_height
+
     var configs = {'innerWidth': w, 
                    'innerHeight': h,
                    'sortAreaWidth': sort_area_width, 
@@ -99,10 +105,14 @@ jsPsych.plugins['free-sort-mod'] = (function() {
                    'stimWidth': stim_width, 
                    'stimHeight': stim_height}
 
-    html += '<div ' +
-      'id="jspsych-free-sort-arena" ' +
-      'class="jspsych-free-sort-arena" ' +
-      'style="position: relative; width:' +
+    html += '<div id="instr"; style="position: absolute; top:' + 
+          .3*sort_area_height + '; left: ' + instruction_box_padding +
+          '; width: ' + instructions_box_width + '; height: ' + 
+          instructions_box_height + ';"></div>' +
+      '<div ' +
+        'id="jspsych-free-sort-arena" ' +
+        'class="jspsych-free-sort-arena" ' +
+        'style="position: relative; width:' +
           sort_area_width + 'px; height:' + sort_area_height + 
           'px; border:2px solid #444;"' +
       '><div style="position: absolute; top:0; left:0px; width:' + 
@@ -137,6 +147,13 @@ jsPsych.plugins['free-sort-mod'] = (function() {
     var blue_category_box = display_element.querySelector('#blue_category')
     blue_category_box.style.fontSize="30px"
     blue_category_box.innerHTML = 'Blue Category'
+    var instructions_box = display_element.querySelector('#instr')
+    instructions_box.style.fontSize="20px"
+    instructions_box.innerHTML = 'We are now going to show you the correct ' + 
+        'category for one of the cards by moving it to the top of the screen ' +
+        'and changing its background color to reflect its category. Drag it to ' +
+        'the correct box and, if you wish, move any of the other cards to ' +
+        'incorporate this new information, then click "Next".'
 
     ///////////////////////////////////////////////////////////////////////////
     ////////////////////////// MAIN EXPERIMENT ////////////////////////////////
@@ -390,17 +407,20 @@ jsPsych.plugins['free-sort-mod'] = (function() {
         trial_ind += 1
       }
       if (trial_ind < trial.stimuli.length){
-        if (trial_ind < 2) {
-          alert('We are now going to show you the correct category for one of the ' +
-            'cards by moving it to the top of the screen and changing its background ' +
-            'color to reflect its category. Drag it to the correct box and, if you ' + 
-            'wish, move any of the other cards to incorporate this new information, then ' +
-            'click "Next".')
+        // if (trial_ind < 2) {
+        //   alert('We are now going to show you the correct category for one of the ' +
+        //     'cards by moving it to the top of the screen and changing its background ' +
+        //     'color to reflect its category. Drag it to the correct box and, if you ' + 
+        //     'wish, move any of the other cards to incorporate this new information, then ' +
+        //     'click "Next".')
+        // }
+        if (trial_ind == 2) {
+          instructions_box.innerHTML = ''
         }
         next_trial()
       } else {
         // advance to next part
-        display_element.innerHTML = '';
+        display_element.innerHTML = ''
         var free_sort_data = {'configs' : configs, 
                               'data' : data}
         jsPsych.finishTrial(free_sort_data)
