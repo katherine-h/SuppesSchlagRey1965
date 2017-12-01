@@ -149,11 +149,9 @@ jsPsych.plugins['free-sort-mod'] = (function() {
     blue_category_box.innerHTML = 'Blue Category'
     var instructions_box = display_element.querySelector('#instr')
     instructions_box.style.fontSize="20px"
-    instructions_box.innerHTML = 'We are now going to show you the correct ' + 
-        'category for one of the cards by moving it to the top of the screen ' +
-        'and changing its background color to reflect its category. Drag it to ' +
-        'the correct box and, if you wish, move any of the other cards to ' +
-        'incorporate this new information, then click "Next".'
+    instructions_box.innerHTML = '<p align=left> Drag and drop each card ' +
+            'into whichever category box you think it belongs. Then, click ' +
+            '"Next" to proceed.</p>'
 
     ///////////////////////////////////////////////////////////////////////////
     ////////////////////////// MAIN EXPERIMENT ////////////////////////////////
@@ -195,10 +193,10 @@ jsPsych.plugins['free-sort-mod'] = (function() {
       }
     }
 
-    var add_image = function(source, coords, i){
-      // Add a new stimulus (colored card) to the screen
+    var add_image = function(source, coords, i, fade_opt){
+      // Add a new stimulus to the screen. If fade_opt, card fades in
       var id = 'im' + i
-      display_element.querySelector("#jspsych-free-sort-arena").innerHTML += '<img ' +
+      specs = '<img ' +
           'id="' + id + '"' +
           'src=' + source + ' ' +
           'data-src=' + source + ' ' +
@@ -206,9 +204,12 @@ jsPsych.plugins['free-sort-mod'] = (function() {
           'draggable="false" '+
           'style="position: absolute; cursor: move; width:' + stim_width + 
               'px; height:' + stim_height + 'px; top:' + coords.y + 
-              'px; left:' + coords.x + 'px;">' +
-          '</img>'
-      make_all_draggable()
+              'px; left:' + coords.x + 'px;' 
+      if (fade_opt == true) {
+        specs += 'display: None"'
+      } 
+      specs += '"></img>'
+      display_element.querySelector("#jspsych-free-sort-arena").innerHTML += specs
     }
 
     var add_locations = function(trial_data){
@@ -354,14 +355,21 @@ jsPsych.plugins['free-sort-mod'] = (function() {
     }
 
     var next_trial = function(){
-      // Proceed to next trial
-      // remove a white card
+      // Proceed to next trial: remove a white card
       var el = document.querySelector('#im' + trial_ind);
+      var start_x = Number(el.style.left.replace('px',''))
+      var start_y = Number(el.style.top.replace('px',''))
       el.parentNode.removeChild(el);
-      // place a colored card with the same pattern of letters
-      add_image('ims/im' + trial_ind + '_colored.png', {x:(
-                sort_area_width/2.0)-(stim_width/2.0), y:0}, trial_ind + 
-                '_colored')
+      // place colored card with the same pattern of letters
+      var example_x = (sort_area_width/2.0)-(stim_width/2.0) //where to present ex
+      var example_y = 0
+      var id = 'im' + trial_ind + '_colored'
+      add_image('ims/' + id + '.png', {x: start_x, y: start_y}, 
+                trial_ind + '_colored', true)
+      $('#' + id).fadeIn(3000,function(){})
+      $('#' + id).animate({'top': example_y + "px", 
+          'left': (sort_area_width/2.0)-(stim_width/2.0) + "px"}, 1500, function (){})
+      make_all_draggable()
       trial_start_time = (new Date()).getTime()
     }
 
@@ -374,9 +382,10 @@ jsPsych.plugins['free-sort-mod'] = (function() {
         var x = (sort_area_width - total_width)/2.0
         for (var i = 0; i < stims.length; i++){
           var ind = stims[i].split(/(\d+)/)[1]
-          add_image(stims[i], {x:x, y: start_y}, ind)
+          add_image(stims[i], {x:x, y: start_y}, ind, false)
           x += stim_width + buffer
         }
+        make_all_draggable()
       }
 
       var shuffled_stims = trial.stimuli.slice(0)
@@ -407,17 +416,17 @@ jsPsych.plugins['free-sort-mod'] = (function() {
         trial_ind += 1
       }
       if (trial_ind < trial.stimuli.length){
-        // if (trial_ind < 2) {
-        //   alert('We are now going to show you the correct category for one of the ' +
-        //     'cards by moving it to the top of the screen and changing its background ' +
-        //     'color to reflect its category. Drag it to the correct box and, if you ' + 
-        //     'wish, move any of the other cards to incorporate this new information, then ' +
-        //     'click "Next".')
-        // }
         if (trial_ind == 2) {
           instructions_box.innerHTML = ''
         }
         next_trial()
+        if (trial_ind == 0) {
+          instructions_box.innerHTML = '<p align=left> We are now showing you the correct ' + 
+            'category for one of the cards by moving it to the top of the screen ' +
+            'and changing its background color to reflect its category. Drag it to ' +
+            'the correct box, then move any of the other cards to ' +
+            'incorporate this new information before clicking "Next". </p>'
+        }
       } else {
         // advance to next part
         display_element.innerHTML = ''
