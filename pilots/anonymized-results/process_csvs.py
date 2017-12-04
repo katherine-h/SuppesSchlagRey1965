@@ -70,7 +70,24 @@ def reformat(d):
 
 	return out
 
-fnames = ['A1', 'A2']
+def dicts_by_subj(fname):
+	num_subjs = len(read_csv_field(fname, 0, 'HitId'))
+	all_subjs_dict = read_data_csv(fname)
+	for s in range(num_subjs):
+		d = dict()
+		for k in all_subjs_dict.keys():
+			if k != 'Annotation':
+				print '\n' + k
+				print type(all_subjs_dict[k][s])
+				d[k] = [all_subjs_dict[k][s]]
+		print d.keys()
+		print all_subjs_dict['WorkerId']
+		print d['WorkerId']
+		savename = d['WorkerId'][0] + '.json'
+		d_reformatted = reformat(d)
+		save_dict_as_json(d_reformatted, savename)
+
+fnames = ['pilot_b_results']
 for f in fnames:
-	save_dict_as_json(reformat(read_data_csv(f + '.csv')), f + '.json')
+	dicts_by_subj(f + '.csv')
 
