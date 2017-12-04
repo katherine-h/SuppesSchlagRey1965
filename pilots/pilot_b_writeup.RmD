@@ -1,0 +1,349 @@
+---
+title: "Replication of 'Observable Changes of Hypotheses under Positive Reinforcement' by Suppes & Schlag-Rey (1965, Science)"
+author: "Katherine Hermann (hermannk [at] stanford [dot] edu)"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  html_document:
+    toc: yes
+    toc_depth: 3
+    toc_float:
+      collapsed: false
+---
+
+<!-- Replication reports should all use this template to standardize reporting across projects.  These reports will be public supplementary materials that accompany the summary report(s) of the aggregate results. -->
+
+##Introduction
+
+Suppes and Schlag-Rey (1965) examined whether, in a categorization task, people reclassify items following positive reinforcement, that is, evidence that their categories are already consistent with the true classification rule. The authors asked participants to sort cards containing patterns of letters into two categories ("blue" and "pink"). Then, one by one, the authors revealed the cards' true category labels, giving participants the opportunity to reclassify items after each such piece of feedback. A labeled example was considered to be positive reinforcement if the label agreed with the participant's existing classification, and negative reinforcement otherwise. Perhaps surprisingly, participants sometimes readjusted their categories following positive reinforcement.
+
+While the authors report results from three related experiments, this replication study concerns the first, in which Suppes and Schlag-Rey asked N = 157 participants to categorize eight cards, and presented labeled examples in the same order across participants. The authors found that, for positive reinforcement trials, the mean proportion of category switches across participants and across trials was approximately 0.2. Although they noted a null hypothesis, that the proportion of switches would be 0, they did not report the results of any statistical tests. In the replication study, participants will perform a web-based version of the original task. This study will test whether the probability of switching across participants and across trials is significantly greater than a noise probability of switching (proportion = 0.05, the null hypothesis). If it is, this would confirm Suppes and Schlag-Rey's original finding that the proportion of switches under positive reinforcement is non-zero.
+
+##Methods
+
+###Power Analysis
+
+Suppes and Schlag-Rey do not report an effect size, but note that the proportion of switches under positive reinforcement was roughly 0.2 in their sample of 157 participants. I determined a priori power for a one-tailed one-sample binomial test (difference from a constant) in which the null hypothesis is that there is a small noise probability of switching (proportion = 0.05), and the alternative hypothesis is that proportion = 0.2, per Suppes and Schlag-Rey's findings. To achieve 80% power, 33 instances of positive reinforcement are required. Since reinforcement type depends on a participant's prior classifications, there is no deterministic relationship between the number of participants and number of positive reinforcement instances, but assuming one instance of positive reinforcement per participant seems like a reasonable, if slightly conservative, estimate. On this analysis, then, 33 participants provides 81.94% power, and 50 participants yields 95.17% power. 
+
+###Planned Sample
+
+Participants in this study will be workers on Amazon's Mechanical Turk located in the United States, with an approval rating of at least 85%, who self-identify as being at least 18 years of age, a native English speaker, and not colorblind. Given course budget constraints, this study will run N = 33 participants, estimated to provide 81.94% power.
+
+###Materials
+
+Stimuli are white, blue, and pink cards containing patterns of letters (e.g. “DDK”, “DKK”, etc. — all triples composed of D’s and K's) and consistent with the rule used in the original study (that pink items are patterns ending with "DD" or "KK", whereas blue items are those ending with "DK" or "KD"). Unlike in the original study, in which physical notecards were used, cards are virtual, specified in JavaScript.
+
+###Procedure	
+
+This replication experiment will be conducted on Amazon's Mechanical Turk and will consist of two main parts: a web-based sorting task, and a brief demographics questionnaire.
+
+The web-based sorting task will mimic the original experient: During the initial phase of the experiment ("initial classification"), participants will sort cards into two categories by dragging and dropping cards arranged in random order in the staging area ("starting configuration") into one of two category "bins" (sections of the screen, labeled "blue" and "pink"). 
+
+During the second phase, in each of a series of trials, a white card will disappear and the pink or blue version of that card will appear in the staging area; the color of the card indicates the true category to which the pattern belongs. The participant will place it in the correct category bin. If the card's color (label) agrees with the participant's original classification of the white version of the card, this example will be considered positive reinforcement; if it disagrees, the example will be negative reinforcement. Next, the participant will have the option to reclassify as many cards as they wish, using the drag-and-drop interface. Trials will end once all of the original white cards have been replaced. Examples will appear in the same fixed order across participants as in the original experiment: DKD (blue), KKK (pink), DDD (pink), KDK (blue), DKK (pink), KDD (pink), DDK (blue), KKD (blue).
+
+Following the starting configuration and initial classification, each trial will begin when the colored example is presented and end when the participant clicks a "Next" button. At the end of the trial, for every stimulus, we will record:
+
+1. The (x, y) coordinates
+2. The region of the sorting area that the card occupies ("blue" if it is in the blue category box, "pink", "staging" area if it is still in the staging area, or "ambiguous" if the stimulus straddles a boundary between these areas)
+3. Whether it is in a different region than it was at the end of the previous trial
+
+In addition, we will determine (A) if any cards switched categories from the previous trial, and (B) if the labeled (colored) card constituted positive or negative reinforcement. Reinforcement type is considered undefined if a participant placed the white card containing the pattern of letters in the example was in either the staging region or ambiguous in the prior trial.
+
+Suppes and Schlag-Rey do not provide details about the original task instructions. Given this, we created what we believe are reasonable instructions: participants will be aware that there exists some rule distinguishing the two categories, and that their job is to guess which cards belong to which categories. We encourage participants to take their time, indicating "we would rather that you think hard about your guesses than make them quickly". We hope that this instruction will encourage participants to reclassify cards as appropriate rather than rushing through the task.
+
+A demo of this experiment, created with a combination of JsPsych JavaScript library and custom code, is at: https://web.stanford.edu/~hermannk/251/SuppesSchlagRey1965/oed/experiment/main.html (requires Chrome or Firefox browser)
+
+###Analysis Plan
+
+In this study, we will determine the proportion of reclassifications (mean proportion of reclassifications across trials and across participants), as done in the original study. We will then perform a one-tailed, one-sample exact binomial test to determine if the observered proportion (our alternative hypothesis) is significantly greater than 0.05 (the null hypothesis, representing a small noise probability).
+
+Out of interest, we will also reproduce Figure 1A from Suppes and Schlag-Rey paper, showing proportion of switches as a function of trial.
+
+###Differences from Original Study
+
+The original study participants were college students in the 1960s, whereas in this replication, participants will be workers on Mechanical Turk likely to be more diverse in demographics.
+
+The original study did not specify exclusion criteria. However, one worry about a web-based replication is that participants may not be motivated to reclassify cards when given the opportunity to do so following examples, wishing instead to complete the experiment as quickly as possible, and thus skipping this crucial step. To guard against this, a participant will be excluded if they meet any of the following conditions:
+
+1. Make any "ambiguous" card placements (card straddles multiple regions, e.g. category boxes and/or staging area).
+
+2. Reinforcement type is "undefined" for any trials (previous categorization was either "staging" or "ambiguous").
+
+3. Reclassify cards 0% of the time. Failure to reclassify cards on at least some negative reinforcement trials demonstrates a basic lack of effort on the task.
+
+4. Less than 87.5% correct on final classification, indicating failure to follow instructions to drag colored cards into appropriate category box.
+
+Whereas the original study was performed in person using physical notecards, we have adapted the experiment to a web-based format that we believe preserves the important aspects of the original task.
+
+```{r include=F}
+###Data Preparation
+
+####Load Relevant Libraries and Functions
+library(jsonlite)
+library(dplyr)
+library(ggplot2)
+library(binom)
+
+####Import data
+
+# data has already been minimally preprocessed (converted from csv to json, and json cleaned up, using the python script process_csvs.py)
+data_path <- paste0(getwd(), "/anonymized-results/")
+files <- dir(data_path, pattern = "*.json")
+d.raw <- data.frame()
+problem_report <- data.frame()
+for (f in files) {
+  jf <- paste0(data_path,f)
+  
+  participant <- fromJSON(jf)
+  participant_data <- participant$Data
+  participant_data$workerid <- participant$HITInfo$WorkerId
+  participant_data$gender <- participant$Demographics$Gender
+  participant_data$age <- participant$Demographics$Age
+  participant_data$education <- participant$Demographics$Education
+  problem_report <- bind_rows(participant$ProblemReport)
+  d.raw <- bind_rows(d.raw, participant_data)
+}
+
+# Number of participants
+original_num_participants = length(unique(d.raw$workerid))
+
+#### Preprocess
+
+# convert dtype
+d <- d.raw
+d[sapply(d, is.character)] <- lapply(d[sapply(d, is.character)], as.factor)
+str(d)
+
+#### Data exclusion / filtering
+
+# Check exclusion criteria
+excluded = c()
+exclusion_reasons = c()
+for (worker in levels(d$workerid)) {
+  worker_data <- d %>% filter(workerid == worker)
+  
+  # Exclusion criterion 1: Any card placements are "ambiguous"
+  if (sum(worker_data$num_ambiguous_placements) > 0) {
+    excluded <- c(excluded, c(worker))
+    exclusion_reasons <- c(exclusion_reasons, c("Exclusion1"))
+  }
+  
+  # Exclusion criterion 2: Any reinforcements are "undefined"
+  undefined_reinforcements <- worker_data %>% 
+    filter(reinforcement == 'undefined') %>%
+    NROW()
+  if (undefined_reinforcements > 0) {
+    excluded <- c(excluded, c(worker))
+    exclusion_reasons <- c(exclusion_reasons, c("Exclusion2"))
+  }
+  
+  # Exclusion criterion 3: Reclassify cards 0% of the time
+  num_trials_with_any_reclassification <- worker_data %>% 
+    filter(any_reclassifications == TRUE) %>%
+    NROW()
+  if (num_trials_with_any_reclassification == 0) {
+    excluded <- c(excluded, c(worker))
+    exclusion_reasons <- c(exclusion_reasons, c("Exclusion3"))
+  }
+  
+  # Exclusion criterion 4: Less than 87.5% correct on final classification
+  final_classifications <- worker_data %>%
+    filter(trial == '7')
+  num_correct_final <- sum(
+        (final_classifications$im0_colored_region == 'blue') & 
+        (final_classifications$im1_colored_region == 'pink'),
+        (final_classifications$im2_colored_region == 'pink'),
+        (final_classifications$im3_colored_region == 'blue'),
+        (final_classifications$im4_colored_region == 'pink'),
+        (final_classifications$im5_colored_region == 'pink'),
+        (final_classifications$im6_colored_region == 'blue'),
+        (final_classifications$im7_colored_region == 'blue'))
+  if (num_correct_final < 7) {
+    excluded <- c(excluded, c(worker))
+    exclusion_reasons <- c(exclusion_reasons, c("Exclusion4"))
+  }
+}
+# clean up workspace
+rm(participant, participant_data, worker, worker_data, num_correct_final, num_trials_with_any_reclassification, final_classifications)
+
+# remove excluded participants
+print(paste0('Excluding ', length(excluded), ' participants because: ', exclusion_reasons))
+d_pre_exclusion <- d
+for (worker in excluded) {
+  d <- d[d$workerid != worker,]
+}
+# Number of participants post-exclusion
+num_participants = length(unique(d$workerid))
+num_exclusions = length(excluded)
+
+#### Prepare data for analysis - create columns etc.
+positive_reinforcement_trials <- d %>%
+  filter(reinforcement == 'positive', 
+         trial != 7) # don't include final trial in the analysis, since this is the solution state: all colored cards have been placed
+
+negative_reinforcement_trials <- d %>%
+  filter(reinforcement == 'negative',
+         trial != 7)
+
+#### Prepare data for exploratory analyses
+# calculate 95% CIs around proportions of switches by trial for later figures
+compute_cis_by_trial <- function(reinforcement_type_trials) {
+  cis_lower <- c()
+  cis_upper <- c()
+  for (i in (0:7)) {
+    instances_this_trial = reinforcement_type_trials[reinforcement_type_trials$trial == toString(i),]$any_reclassifications
+    if (length(instances_this_trial) > 0) {
+      x <- sum(instances_this_trial)
+      n <- length(instances_this_trial)
+      cis_lower <- c(cis_lower, binom.confint(x, n, conf.level = 0.95, methods=c("exact"))$lower)
+      cis_upper <- c(cis_upper, binom.confint(x, n, conf.level = 0.95, methods=c("exact"))$upper)
+    }
+  }
+  cis_packed <- list("lower" = cis_lower, "upper" = cis_upper)
+  return (cis_packed)
+}
+
+cis_positive <- compute_cis_by_trial(positive_reinforcement_trials)
+cis_lower_positive <- cis_positive$lower
+cis_upper_positive <- cis_positive$upper
+
+cis_negative <- compute_cis_by_trial(negative_reinforcement_trials)
+cis_lower_negative <- cis_negative$lower
+cis_upper_negative <- cis_negative$upper
+
+# prepare for plot
+summary_positive <- positive_reinforcement_trials %>%
+        group_by(trial) %>% 
+        summarise(prop_switches = sum(any_reclassifications)/length(any_reclassifications))
+summary_positive$reinforcement = 'positive'
+summary_positive$cis_lower = cis_lower_positive
+summary_positive$cis_upper = cis_upper_positive
+summary_negative <- negative_reinforcement_trials %>%
+        group_by(trial) %>% 
+        summarise(prop_switches = sum(any_reclassifications)/length(any_reclassifications))
+summary_negative$reinforcement = 'negative'
+summary_negative$cis_lower = cis_lower_negative
+summary_negative$cis_upper = cis_upper_negative
+summary_proportions_by_trial <- rbind(summary_positive, summary_negative)
+
+#### Sample characteristics
+print('Sample characteristics: demographics')
+gender <- d %>% 
+  group_by(gender, workerid) %>%
+  summarise(first=head(workerid,1)) %>%
+  group_by(gender) %>%
+  tally() %>%
+  mutate(percent = n/sum(n))
+
+education <- d %>% 
+  group_by(gender, education) %>%
+  summarise(first=head(workerid,1)) %>%
+  group_by(education) %>%
+  tally() %>%
+  mutate(percent = n/sum(n))
+
+age <- d %>% 
+  group_by(gender, age) %>%
+  summarise(first=head(workerid,1)) %>%
+  group_by(age) %>%
+  tally() %>%
+  mutate(percent = n/sum(n))
+
+knitr::kable(gender)
+knitr::kable(age)
+knitr::kable(education)
+```
+<!--
+### Methods Addendum (Post Data Collection)
+
+You can comment this section out prior to final report with data collection.
+
+#### Actual Sample
+  Sample size, demographics, data exclusions based on rules spelled out in analysis plan
+
+#### Differences from pre-data collection methods plan
+  Any differences from what was described as the original plan, or “none”.
+-->
+
+##Results
+### Confirmatory analysis
+```{r}
+# Main analysis: Test whether switching on positive reinforcement trials is significantly above zero (really, a small noise probability)
+
+# One-tailed, one-sample exact binomial test
+# null hypothesis: p = 0.05 (small noise probability)
+# alternative hypothesis: p = observed proportion of reclassifications (mean proportion reclassifications across trials across participants)
+
+num_positive_reinforcement_trials <- NROW(positive_reinforcement_trials)
+num_switches <- sum(positive_reinforcement_trials$any_reclassifications)
+
+prop_switch_positive_reinforcement_trials <- num_switches/num_positive_reinforcement_trials
+
+print(paste0('Total # positive reinforcement trials across participants = ', num_positive_reinforcement_trials))
+print(paste0('Prop switches = ', prop_switch_positive_reinforcement_trials))
+
+binom_result <- binom.test(x = num_switches, 
+                          n = num_positive_reinforcement_trials, 
+                          p = 0.05,
+                          alternative = c("greater"))
+print('Negative Reinforcement Trials')
+print(binom_result)
+
+p <- binom_result$p.value
+lower <- binom_result$conf.int[1]
+upper <- binom_result$conf.int[2]
+```
+
+### Exploratory analysis
+```{r}
+# Exploratory Analysis 1: Plot proportion of switches by trial under positive versus under negative reinforcement, for comparison with Suppes and Schlag-Rey's Figure 1A
+
+ggplot(data = summary_proportions_by_trial,
+  aes(x = trial, y = prop_switches, group=1)) +
+  facet_wrap(~reinforcement) +
+  geom_errorbar(aes(ymin=cis_lower, ymax=cis_upper), colour="gray", width=.1) +
+  geom_point(size = 4, color = "darkgreen") +
+  geom_line(size = 1, color = "darkgreen") +
+  ylim(0, 1) + 
+  xlab("Trial") + 
+  ylab("Proportion Switches") +
+  ggtitle("Proportion category switches by reinforcement type") + 
+  ggthemes::theme_few()
+
+# Exploratory Analysis 2: Test whether switching on negative reinforcement trials is significantly above zero (really, a small noise probability)
+
+num_negative_reinforcement_trials <- NROW(negative_reinforcement_trials)
+num_switches_negative <- sum(negative_reinforcement_trials$any_reclassifications)
+
+prop_switch_negative_reinforcement_trials <- num_switches_negative/num_negative_reinforcement_trials
+
+print(paste0('Total # negative reinforcement trials across participants = ', num_negative_reinforcement_trials))
+print(paste0('Prop switches = ', prop_switch_negative_reinforcement_trials))
+
+binom_result <- binom.test(x = num_switches_negative, 
+                          n = num_negative_reinforcement_trials, 
+                          p = 0.05, # noise probability
+                          alternative = c("greater"))
+print('Negative Reinforcement Trials')
+print(binom_result)
+p_negative <- binom_result$p.value
+lower_negative <- binom_result$conf.int[1]
+upper_negative <- binom_result$conf.int[2]
+```
+
+## Discussion
+
+### Summary of Replication Attempt
+
+In a pilot with a target N of `r original_num_participants` participants, `r num_exclusions` participants were excluded, leaving N = `r num_participants` naive participants. 
+
+The original results failed to replicate: the proportion of reclassifications on positive reinforcement trials (N = `r num_positive_reinforcement_trials` positive reinforcements) was `r prop_switch_positive_reinforcement_trials` (95% CIs [`r lower`, `r upper`]), and this proportion was not greater than a small noise probability (p = `r p`, one-sample exact binomial test, one-tailed, where null hypothesis is that proportion of switching is the small noise probability 0.05).
+
+We might expect to obtain this result if participants were failing to reclassify cards in general. However, we found that in the `r num_negative_reinforcement_trials` negative reinforcement trials, the proportion of reclassifications was `r prop_switch_negative_reinforcement_trials` (95% CIs [`r lower_negative`, `r lower_negative`]), which was significantly above chance (p = `r p_negative`), suggesting participants were engaged with the classification task.
+
+Out of interest, we also produced a plot similar to Figure 1A in Suppes and Schlag-Rey (we have not reproduced the authors' figure here for copyright reasons), showing the proportion of category switches by trial, by reinforcement type. We see that while the shape of the positive reinforcement plot is different (it is flat in our case), the pattern of the negative reinforcement plot is qualitatively similar.
+
+<!--
+### Commentary
+
+Add open-ended commentary (if any) reflecting (a) insights from follow-up exploratory analysis, (b) assessment of the meaning of the replication (or not) - e.g., for a failure to replicate, are the differences between original and present study ones that definitely, plausibly, or are unlikely to have been moderators of the result, and (c) discussion of any objections or challenges raised by the current and original authors about the replication attempt.  None of these need to be long.
+-->
