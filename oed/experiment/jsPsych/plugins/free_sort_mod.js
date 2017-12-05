@@ -150,7 +150,8 @@ jsPsych.plugins['free-sort-mod'] = (function() {
     var instructions_box = display_element.querySelector('#instr')
     instructions_box.style.fontSize="20px"
     instructions_box.innerHTML = '<p align=left> Drag and drop each card ' +
-            'into whichever category box you think it belongs. Then, click ' +
+            'into whichever category box you think it belongs; make sure ' +
+            'it is fully inside that box. Then, click ' +
             '"Next" to proceed.</p>'
 
     ///////////////////////////////////////////////////////////////////////////
@@ -366,9 +367,9 @@ jsPsych.plugins['free-sort-mod'] = (function() {
       var id = 'im' + trial_ind + '_colored'
       add_image('ims/' + id + '.png', {x: start_x, y: start_y}, 
                 trial_ind + '_colored', true)
-      $('#' + id).fadeIn(3000,function(){})
+      $('#' + id).fadeIn(2500,function(){})
       $('#' + id).animate({'top': example_y + "px", 
-          'left': (sort_area_width/2.0)-(stim_width/2.0) + "px"}, 1500, function (){})
+          'left': (sort_area_width/2.0)-(stim_width/2.0) + "px"}, 1000, function (){})
       make_all_draggable()
       trial_start_time = (new Date()).getTime()
     }

@@ -190,7 +190,8 @@ for (worker in excluded) {
 
 #### Prepare data for analysis - create columns etc.
 positive_reinforcement_trials <- d %>%
-  filter(reinforcement == 'positive')
+  filter(reinforcement == 'positive', 
+         trial != 7) # don't include final trial in the analysis, since this is the solution state: all colored cards have been placed
 
 # calculate 95% CIs around proportions of switches by trial for later figure
 cis_lower <- c()
@@ -215,15 +216,18 @@ for (i in (0:7)) {
 # alternative hypothesis: p = observed proportion of reclassifications (mean proportion reclassifications across trials across participants)
 
 num_positive_reinforcement_trials <- NROW(positive_reinforcement_trials)
-prop_switch_positive_reinforcement_trials <- sum(positive_reinforcement_trials$any_reclassifications)
+num_switches <- sum(positive_reinforcement_trials$any_reclassifications)
+
+prop_switch_positive_reinforcement_trials <- num_switches/num_positive_reinforcement_trials
 
 print(paste0('Total # positive reinforcement trials across participants = ', num_positive_reinforcement_trials))
 print(paste0('Prop switches = ', prop_switch_positive_reinforcement_trials))
 
-binom_result <- binom.test(x = prop_switch_positive_reinforcement_trials, 
+binom_result <- binom.test(x = num_switches, 
                           n = num_positive_reinforcement_trials, 
                           p = 0.05,
                           alternative = c("greater"))
+print('Positive Reinforcement Trials')
 print(binom_result)
 
 p <- binom_result$p.value

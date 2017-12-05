@@ -111,7 +111,6 @@ original_num_participants = length(unique(d.raw$workerid))
 # convert dtype
 d <- d.raw
 d[sapply(d, is.character)] <- lapply(d[sapply(d, is.character)], as.factor)
-str(d)
 
 #### Data exclusion / filtering
 
@@ -247,12 +246,15 @@ age <- d %>%
   group_by(age) %>%
   tally() %>%
   mutate(percent = n/sum(n))
+```
 
+<!--
+```{r}
 knitr::kable(gender)
 knitr::kable(age)
 knitr::kable(education)
 ```
-<!--
+
 ### Methods Addendum (Post Data Collection)
 
 You can comment this section out prior to final report with data collection.
@@ -285,12 +287,24 @@ binom_result <- binom.test(x = num_switches,
                           n = num_positive_reinforcement_trials, 
                           p = 0.05,
                           alternative = c("greater"))
-print('Negative Reinforcement Trials')
+print('Positive Reinforcement Trials')
 print(binom_result)
 
 p <- binom_result$p.value
 lower <- binom_result$conf.int[1]
 upper <- binom_result$conf.int[2]
+
+# Create plot showing this result
+ggplot(data = data.frame(prop_switch_positive_reinforcement_trials, reinforcement_type="Positive"),
+       aes(x = reinforcement_type, y = prop_switch_positive_reinforcement_trials)) + 
+  geom_point() +
+  geom_errorbar(aes(ymin=lower, ymax=upper), colour="gray", width=.1) +
+  geom_point(size = 4) +
+  ylim(0, 1) + 
+  xlab("Trial Reinforcement Type") + 
+  ylab("Proportion Switches") +
+  ggtitle("Proportion category switches for positive reinforcement trials") + 
+  ggthemes::theme_few()
 ```
 
 ### Exploratory analysis
