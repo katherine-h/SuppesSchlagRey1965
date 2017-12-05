@@ -1,0 +1,10 @@
+name: Publish Document
+title:
+username:
+account: rpubs
+server: rpubs.com
+hostUrl: rpubs.com
+appId: https://api.rpubs.com/api/v1/document/337513/0a643903d07e43f3a3a161953515ef1a
+bundleId: https://api.rpubs.com/api/v1/document/337513/0a643903d07e43f3a3a161953515ef1a
+url: http://rpubs.com/hermannk/337513
+when: 1512498226.51221
