@@ -56,7 +56,7 @@ A demo of this experiment, created with a combination of JsPsych JavaScript libr
 
 In this study, we will determine the proportion of reclassifications (mean proportion of reclassifications across trials and across participants), as done in the original study. We will then perform a one-tailed, one-sample exact binomial test to determine if the observered proportion (our alternative hypothesis) is significantly greater than 0.05 (the null hypothesis, representing a small noise probability).
 
-Out of interest, we will also reproduce Figure 1A from Suppes and Schlag-Rey paper, showing proportion of switches as a function of trial.
+In exploratory analyses, we will also plot the proportion of switches as a function of trial, similar to Figure 1A in (Suppes and Schlag-Rey 1965), and will determine whether the observed proportion of switches on negative reinforcement trials is significantly greater than 0.05.
 
 ###Differences from Original Study
 
@@ -183,7 +183,14 @@ negative_reinforcement_trials <- d %>%
   filter(reinforcement == 'negative',
          trial != 7)
 
-#### Prepare data for exploratory analyses
+#### Utils
+binom_test <- function(num_successes, n) {
+  return (binom.test(x = num_successes, 
+                     n = n, # num trials
+                     p = 0.05, # alternative hypothesis
+                     alternative = c("greater"))) # also returns one-tailed 95% CIs
+}
+
 # calculate 95% CIs around proportions of switches by trial for later figures
 compute_cis_by_trial <- function(reinforcement_type_trials) {
   cis_lower <- c()
@@ -193,14 +200,16 @@ compute_cis_by_trial <- function(reinforcement_type_trials) {
     if (length(instances_this_trial) > 0) {
       x <- sum(instances_this_trial)
       n <- length(instances_this_trial)
-      cis_lower <- c(cis_lower, binom.confint(x, n, conf.level = 0.95, methods=c("exact"))$lower)
-      cis_upper <- c(cis_upper, binom.confint(x, n, conf.level = 0.95, methods=c("exact"))$upper)
+      out <- binom_test(x, n)
+      cis_lower <- c(cis_lower, out$conf.int[1])
+      cis_upper <- c(cis_upper, out$conf.int[2])
     }
   }
   cis_packed <- list("lower" = cis_lower, "upper" = cis_upper)
   return (cis_packed)
 }
 
+#### Prepare data for exploratory analyses
 cis_positive <- compute_cis_by_trial(positive_reinforcement_trials)
 cis_lower_positive <- cis_positive$lower
 cis_upper_positive <- cis_positive$upper
@@ -284,16 +293,12 @@ prop_switch_positive_reinforcement_trials <- num_switches/num_positive_reinforce
 print(paste0('Total # positive reinforcement trials across participants = ', num_positive_reinforcement_trials))
 print(paste0('Prop switches = ', prop_switch_positive_reinforcement_trials))
 
-binom_result <- binom.test(x = num_switches, 
-                          n = num_positive_reinforcement_trials, 
-                          p = 0.05,
-                          alternative = c("greater"))
-print('Positive Reinforcement Trials')
-print(binom_result)
-
+binom_result <- binom_test(num_switches, num_positive_reinforcement_trials) # defined in Utils
 p <- binom_result$p.value
 lower <- binom_result$conf.int[1]
 upper <- binom_result$conf.int[2]
+print('Positive Reinforcement Trials')
+print(binom_result)
 
 # Create plot showing this result
 ggplot(data = data.frame(prop_switch_positive_reinforcement_trials, reinforcement_type="Positive"),
@@ -324,7 +329,7 @@ ggplot(data = summary_proportions_by_trial,
   ggtitle("Proportion category switches by reinforcement type") + 
   ggthemes::theme_few()
 
-# Exploratory Analysis 2: Test whether switching on negative reinforcement trials is significantly above zero (really, a small noise probability)
+# Exploratory Analysis 2: Test whether switching on negative reinforcement trials is significantly above 0.05 (small noise probability)
 
 num_negative_reinforcement_trials <- NROW(negative_reinforcement_trials)
 num_switches_negative <- sum(negative_reinforcement_trials$any_reclassifications)
@@ -334,15 +339,12 @@ prop_switch_negative_reinforcement_trials <- num_switches_negative/num_negative_
 print(paste0('Total # negative reinforcement trials across participants = ', num_negative_reinforcement_trials))
 print(paste0('Prop switches = ', prop_switch_negative_reinforcement_trials))
 
-binom_result <- binom.test(x = num_switches_negative, 
-                          n = num_negative_reinforcement_trials, 
-                          p = 0.05, # noise probability
-                          alternative = c("greater"))
+binom_result <- binom_test(num_switches_negative, num_negative_reinforcement_trials) # defined in Utils
+p <- binom_result$p.value
+lower <- binom_result$conf.int[1]
+upper <- binom_result$conf.int[2]
 print('Negative Reinforcement Trials')
 print(binom_result)
-p_negative <- binom_result$p.value
-lower_negative <- binom_result$conf.int[1]
-upper_negative <- binom_result$conf.int[2]
 ```
 
 <!--
