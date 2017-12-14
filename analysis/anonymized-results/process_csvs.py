@@ -87,7 +87,7 @@ def dicts_by_subj(fname):
 		d_reformatted = reformat(d)
 		save_dict_as_json(d_reformatted, savename)
 
-fnames = ['pilot_b_results']
+fnames = ['HIT1', 'HIT2', 'HIT3', 'HIT4']
 for f in fnames:
 	dicts_by_subj(f + '.csv')
 
